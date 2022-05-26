@@ -8,12 +8,14 @@ class Tile extends StatefulWidget {
 	final int index;
 	final Function onDelete;
 	final Function onSubmit;
+	final Function onUpdate;
 	final TextEditingController controller;
 
 	const Tile({Key? key,
 		required this.todo,
 		required this.onDelete,
 		required this.onSubmit,
+		required this.onUpdate,
 		required this.index,
 		required this.controller
 	}): super(key: key); 
@@ -25,6 +27,7 @@ class Tile extends StatefulWidget {
 
 class TileState extends State<Tile> {
 	FocusNode focusNode = FocusNode();
+	FocusNode txtfocusNode = FocusNode();
 	bool completed = false;
 	bool wasCompleted = false;
 	bool dirty = false;
@@ -67,16 +70,15 @@ class TileState extends State<Tile> {
 	Widget build(BuildContext context) {
 		return GestureDetector(
 				onHorizontalDragUpdate: (movement) {
-					int sensitivity = 8;
+					int sensitivity = 4;
 					if (movement.delta.dx > sensitivity || movement.delta.dx < -sensitivity) {
 						wasCompleted = false;
 						completed = !completed;
 						setState(() {});
-						widget.onSubmit(widget.index, completed);
+						widget.onUpdate(widget.index, completed);
 					}
 				},
 				child: SizedBox(
-				height: 50,
 				width: MediaQuery.of(context).size.width,
 				child: RawKeyboardListener(
 						focusNode: focusNode,
@@ -107,6 +109,14 @@ class TileState extends State<Tile> {
 									dirty = false;
 								}
 							},
+							textInputAction: TextInputAction.done,
+							onEditingComplete: () {
+								debugPrint("Editing done");
+								txtfocusNode.unfocus();
+							},
+							keyboardType: TextInputType.multiline,
+							maxLines: null,
+							focusNode: txtfocusNode,
 					),
 				),
 			)

@@ -48,6 +48,12 @@ class TodoProvider extends ChangeNotifier {
 		updateFromDB(db);
 	}
 
+	updateTodo(int index, bool completed) {
+		DB db = DB();
+		_list[index].completed = completed;
+		db.updateTodo(_list[index]);
+	}
+
 	save(int index, bool completed) {
 		debugPrint("Index saved $index");
 		debugPrint("List length ${_list.length}");

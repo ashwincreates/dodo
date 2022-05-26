@@ -47,7 +47,10 @@ class NoteState extends State<Note> {
                     builder: (context, todo, child) {
                       return Text(
                         DateFormat('EEEE').format(todo.date),
-                        style: Theme.of(context).textTheme.headline5,
+												style: const TextStyle(
+														color: Colors.lightBlue,
+														fontSize: 18,
+												),
                       );
                     },
                   ),
@@ -56,7 +59,10 @@ class NoteState extends State<Note> {
 											var date = todo.date;
                       return Text(
                         "${date.day} ${DateFormat('MMM').format(date)} ${date.year}",
-                        style: Theme.of(context).textTheme.headline4,
+												style: const TextStyle(
+														color: Colors.blue,
+														fontSize: 32,
+												),
                       );
                     },
                   ),
@@ -74,6 +80,7 @@ class NoteState extends State<Note> {
                           itemBuilder: (BuildContext context, int index) {
                             return Tile(
                               onSubmit: todo.save,
+															onUpdate: todo.updateTodo,
                               todo: todo.list[index],
                               onDelete: deleteElement,
                               index: index,
@@ -90,9 +97,7 @@ class NoteState extends State<Note> {
             onPressed: addElement,
             child: const Icon(
               Icons.add,
-              color: Colors.black87,
             ),
-            backgroundColor: Colors.grey,
           ),
         )
       ])),

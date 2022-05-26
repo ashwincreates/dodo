@@ -56,7 +56,7 @@ class MyHomePage extends StatelessWidget {
 									},
 									icon: const Icon(
                     Icons.calendar_month_rounded,
-                    color: Colors.black87,
+                    color: Colors.black38,
                     size: 30,
 									))
             ],
