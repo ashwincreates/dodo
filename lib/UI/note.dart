@@ -12,7 +12,6 @@ class Note extends StatefulWidget {
 }
 
 class NoteState extends State<Note> {
-
   @override
   void initState() {
     super.initState();
@@ -21,11 +20,6 @@ class NoteState extends State<Note> {
   deleteElement(int index) {
     var list = context.read<TodoProvider>();
     list.deleteElement(index);
-  }
-
-  addElement() {
-    var list = context.read<TodoProvider>();
-    list.addItem();
   }
 
   @override
@@ -47,22 +41,22 @@ class NoteState extends State<Note> {
                     builder: (context, todo, child) {
                       return Text(
                         DateFormat('EEEE').format(todo.date),
-												style: const TextStyle(
-														color: Colors.lightBlue,
-														fontSize: 18,
-												),
+                        style: const TextStyle(
+                          color: Colors.lightBlue,
+                          fontSize: 18,
+                        ),
                       );
                     },
                   ),
                   Consumer<TodoProvider>(
                     builder: (context, todo, child) {
-											var date = todo.date;
+                      var date = todo.date;
                       return Text(
                         "${date.day} ${DateFormat('MMM').format(date)} ${date.year}",
-												style: const TextStyle(
-														color: Colors.blue,
-														fontSize: 32,
-												),
+                        style: const TextStyle(
+                          color: Colors.blue,
+                          fontSize: 32,
+                        ),
                       );
                     },
                   ),
@@ -80,7 +74,7 @@ class NoteState extends State<Note> {
                           itemBuilder: (BuildContext context, int index) {
                             return Tile(
                               onSubmit: todo.save,
-															onUpdate: todo.updateTodo,
+                              onUpdate: todo.updateTodo,
                               todo: todo.list[index],
                               onDelete: deleteElement,
                               index: index,
@@ -90,16 +84,6 @@ class NoteState extends State<Note> {
             ),
           ],
         ),
-        Positioned(
-          right: 15,
-          bottom: 20,
-          child: FloatingActionButton(
-            onPressed: addElement,
-            child: const Icon(
-              Icons.add,
-            ),
-          ),
-        )
       ])),
     );
   }

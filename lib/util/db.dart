@@ -2,19 +2,22 @@ import 'package:flutter/cupertino.dart';
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:todo/models/collection.dart';
 import 'package:todo/models/todo.dart';
 import 'package:intl/intl.dart';
 
 class DB {
-	DB(); 
-
 	Future<Database> open() async {
 		WidgetsFlutterBinding.ensureInitialized();
+		debugPrint(await getDatabasesPath());
 		final database = openDatabase(
 				join(await getDatabasesPath(), 'todos.db'),
-				onCreate: ((db, version) {
-					return db.execute(
-							'CREATE TABLE IF NOT EXISTS todos(id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT, date TEXT, completed INT)'
+				onCreate: ((db, version) async {
+					await db.execute(
+							'CREATE TABLE IF NOT EXISTS todos(id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT, date TEXT, completed INT, collection TEXT)',
+					);
+					await db.execute(
+							'CREATE TABLE IF NOT EXISTS collections(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, date TEXT)'
 					);
 				}),
 				version: 1,
@@ -28,6 +31,16 @@ class DB {
 		await db.insert(
 				'todos',
 				todo.toMap(),
+				conflictAlgorithm: ConflictAlgorithm.replace
+		);
+	}
+
+	Future<void> insertCollection(Collection collection) async {
+		final Database db = await open();
+
+		await db.insert(
+				'collections',
+				collection.toMap(),
 				conflictAlgorithm: ConflictAlgorithm.replace
 		);
 	}
@@ -61,7 +74,20 @@ class DB {
 					id: list[i]['id'],
 					text: list[i]['text'],
 					date: DateTime.parse(list[i]['date']),
-					completed: list[i]['completed'] == 1 ? true : false
+					completed: list[i]['completed'] == 1 ? true : false,
+					collection: list[i]['collection']
+			);	
+		});
+	}
+
+	Future<List<Collection>> fetchcollections() async {
+		final Database db = await open();
+		final List<Map<String, dynamic>> list = await db.query('collections');
+		return List.generate(list.length, (i) {
+			return Collection(
+					id: list[i]['id'],
+					text: list[i]['text'],
+					date: DateTime.parse(list[i]['date']),
 			);	
 		});
 	}
@@ -79,7 +105,8 @@ class DB {
 					id: list[i]['id'],
 					text: list[i]['text'],
 					date: DateTime.parse(list[i]['date']),
-					completed: list[i]['completed'] == 1 ? true : false
+					completed: list[i]['completed'] == 1 ? true : false,
+					collection: list[i]['collection']
 			);	
 		});
 	}

@@ -17,6 +17,7 @@ class TodoProvider extends ChangeNotifier {
 				var controller = TextEditingController(text: todo.text);
 				_list.add(todo);
 				_controller.add(controller);
+				debugPrint(todo.toString());
 			}
 			notifyListeners();
 		});	
