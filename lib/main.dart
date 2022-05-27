@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:todo/UI/note.dart';
 import 'package:todo/models/todo_provider.dart';
 import 'package:todo/UI/collection.dart';
+import 'package:todo/models/collection_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,8 +19,10 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: ChangeNotifierProvider(
-          create: (context) => TodoProvider(),
+        home: MultiProvider(
+						providers: [
+							ChangeNotifierProvider(create: (context) => TodoProvider()),
+						],
           child: const MyHomePage(),
         ));
   }
@@ -53,7 +56,7 @@ class MyHomePage extends StatelessWidget {
               splashRadius: 25,
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CollectionList()));
+                    MaterialPageRoute(builder: (context) => Collections()));
               },
               icon: const Icon(
                 Icons.all_inbox,

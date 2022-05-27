@@ -22,7 +22,7 @@ class Collection {
 
 	Map<String, dynamic> toMap() {
 		return {
-			'text': text,
+			'title': text,
 			'date': date.toIso8601String(),
 		};
 	}

@@ -86,7 +86,7 @@ class DB {
 		return List.generate(list.length, (i) {
 			return Collection(
 					id: list[i]['id'],
-					text: list[i]['text'],
+					text: list[i]['title'],
 					date: DateTime.parse(list[i]['date']),
 			);	
 		});

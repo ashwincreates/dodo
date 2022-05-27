@@ -12,12 +12,14 @@ class CollectionProvider extends ChangeNotifier {
 			for (final collection in value) {
 				_collections.add(collection);
 			}
+			notifyListeners();
 		});
 	}
 
 	get collection => _collections;
 
 	insertcollection(String title) {
+		debugPrint("collection created");
 		DB db = DB();
 		Collection col = Collection(
 				text: title,
