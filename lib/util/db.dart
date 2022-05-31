@@ -14,7 +14,7 @@ class DB {
 				join(await getDatabasesPath(), 'todos.db'),
 				onCreate: ((db, version) async {
 					await db.execute(
-							'CREATE TABLE IF NOT EXISTS todos(id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT, date TEXT, completed INT, collection TEXT)',
+							'CREATE TABLE IF NOT EXISTS todos(id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT, date TEXT, completed INT, collection INT)',
 					);
 					await db.execute(
 							'CREATE TABLE IF NOT EXISTS collections(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, date TEXT)'
@@ -56,6 +56,17 @@ class DB {
 		);
 	}
 
+	Future<void> updateCollection(Collection collection) async {
+		final Database db = await open();
+
+		await db.update(
+			'collections',
+			collection.toMap(),
+			where: 'id = ?',
+			whereArgs: [collection.id]
+		);
+	}
+
 	Future<void> deleteTodo(Todo todo) async {
 		final Database db = await open();
 
@@ -92,6 +103,15 @@ class DB {
 		});
 	}
 
+	Future<void> deletecollections(List<Collection> collections) async {
+		Database db = await open();
+		Batch batch = db.batch();
+		for (final collection in collections) {
+			batch.delete('collections', where: 'id = ?', whereArgs: ['${collection.id}']);
+		}
+		await batch.commit();
+	}
+
 	Future<List<Todo>> fetchtodosByDate(DateTime d) async {
 		final Database db = await open();
 		String date = DateFormat('yyyy-MM-dd').format(d);
@@ -105,6 +125,23 @@ class DB {
 					id: list[i]['id'],
 					text: list[i]['text'],
 					date: DateTime.parse(list[i]['date']),
+					completed: list[i]['completed'] == 1 ? true : false,
+					collection: list[i]['collection']
+			);	
+		});
+	}
+
+	Future<List<Todo>> fetchtodosByCollection(int id) async {
+		final Database db = await open();
+		final List<Map<String, dynamic>> list = await db.query(
+				'todos',
+				where: "collection = ?",
+				whereArgs: ["$id"]
+				);
+		return List.generate(list.length, (i) {
+			return Todo(
+					id: list[i]['id'],
+					text: list[i]['text'],
 					completed: list[i]['completed'] == 1 ? true : false,
 					collection: list[i]['collection']
 			);	

@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:todo/UI/note.dart';
 import 'package:todo/models/todo_provider.dart';
 import 'package:todo/UI/collection.dart';
-import 'package:todo/models/collection_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,7 +55,7 @@ class MyHomePage extends StatelessWidget {
               splashRadius: 25,
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Collections()));
+                    MaterialPageRoute(builder: (context) => const Collections()));
               },
               icon: const Icon(
                 Icons.all_inbox,

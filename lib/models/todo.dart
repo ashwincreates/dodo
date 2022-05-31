@@ -1,16 +1,16 @@
 class Todo {
 	String text;
 	bool completed;
-	DateTime date;
+	DateTime? date;
 	int id;
-	String collection;
+	int collection;
 
 	Todo({
 		this.id = 0,
 		required this.text,
 		required this.completed,
-		required this.date,
-		this.collection = "",
+		this.date,
+		this.collection = -1,
 	});
 
 	get getText => text;
@@ -32,7 +32,7 @@ class Todo {
 	Map<String, dynamic> toMap() {
 		return {
 			'text': text,
-			'date': date.toIso8601String(),
+			'date': date == null ? "" : date?.toIso8601String(),
 			'completed': completed ? 1 : 0,
 			'collection': collection
 		};

@@ -64,8 +64,6 @@ class NoteState extends State<Note> {
               ),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                  physics: const ScrollPhysics(),
                   child: Consumer<TodoProvider>(
                       builder: (context, todo, child) => ListView.builder(
                           padding: const EdgeInsets.all(16),
@@ -80,7 +78,7 @@ class NoteState extends State<Note> {
                               index: index,
                               controller: todo.controller[index],
                             );
-                          }))),
+                          })),
             ),
           ],
         ),
